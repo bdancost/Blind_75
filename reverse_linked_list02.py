@@ -1,7 +1,6 @@
-from typing import Optional
+from typing import Optional, List
 
 
-# Definição de um Nó da Lista Encadeada (padrão do LeetCode)
 class ListNode:
     def __init__(self, val=0, next=None):
         self.val = val
@@ -14,29 +13,57 @@ class Solution:
         curr = head
 
         while curr:
-            nxt = curr.next  # 1. Guarda a referência do próximo nó
-            curr.next = prev  # 2. Inverte o ponteiro (aponta para trás)
-            prev = curr  # 3. Move o ponteiro 'prev' um passo à frente
-            curr = nxt  # 4. Move o ponteiro 'curr' um passo à frente
+            nxt = curr.next
+            curr.next = prev
+            prev = curr
+            curr = nxt
 
-        return prev  # 'prev' agora é a nova cabeça da lista invertida
+        return prev
 
 
-# --- CÓDIGO DE TESTE E MONTAGEM DA LISTA ---
-node5 = ListNode(5)
-node4 = ListNode(4, node5)
-node3 = ListNode(3, node4)
-node2 = ListNode(2, node3)
-node1 = ListNode(1, node2)
+# =====================================================================
+# 💡 FUNÇÕES UTILITÁRIAS PARA FACILITAR OS SEUS TESTES
+# =====================================================================
 
+def build_linked_list(elements: List[int]) -> Optional[ListNode]:
+    """Converte um Array comum [1, 2, 3...] em uma Linked List automaticamente."""
+    if not elements:
+        return None
+
+    head = ListNode(elements[0])
+    curr = head
+    for val in elements[1:]:
+        curr.next = ListNode(val)
+        curr = curr.next
+
+    return head
+
+
+def print_linked_list(head: Optional[ListNode]) -> None:
+    """Imprime a Linked List de forma legível no terminal."""
+    result = []
+    curr = head
+    while curr:
+        result.append(str(curr.val))
+        curr = curr.next
+    print(" -> ".join(result) + " -> None")
+
+
+# =====================================================================
+# --- CÓDIGO DE TESTE AGORA SUPER SIMPLES ---
+# =====================================================================
+
+# 1. Passe qualquer lista gigante do Python diretamente aqui:
+dados_de_teste = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
+# 2. Converte para Linked List em uma linha
+minha_lista = build_linked_list(dados_de_teste)
+
+# 3. Executa a inversão
 validator = Solution()
-new_head = validator.reverseList(node1)
+lista_invertida = validator.reverseList(minha_lista)
 
-# Imprimindo a lista invertida para validar
-result = []
-temp = new_head
-while temp:
-    result.append(str(temp.val))
-    temp = temp.next
-
-print("Lista Invertida: " + " -> ".join(result) + " -> None")
+# 4. Imprime o resultado
+print("Lista Invertida:")
+print_linked_list(lista_invertida)
+# Saída: 10 -> 9 -> 8 -> 7 -> 6 -> 5 -> 4 -> 3 -> 2 -> 1 -> None
